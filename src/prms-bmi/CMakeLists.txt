@@ -12,13 +12,8 @@ add_library(${PROJECT_NAME} "")
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
 
 find_package(coretran REQUIRED CONFIG)
-find_package(netCDF REQUIRED CONFIG)
-#find_package(netcdff REQUIRED CONFIG)
-find_package(hdf5 REQUIRED CONFIG)
 target_link_libraries(${PROJECT_NAME} PUBLIC coretran)
-target_link_libraries(${PROJECT_NAME} PUBLIC netCDF)
-#target_link_libraries(${PROJECT_NAME} PUBLIC netcdff)
-target_link_libraries(${PROJECT_NAME} PUBLIC hdf5)
+
 find_package(NetCDF REQUIRED COMPONENTS "F90")
 
 if (NOT BUILD_SHARED_LIBS)
