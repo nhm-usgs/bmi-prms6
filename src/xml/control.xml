@@ -1,0 +1,801 @@
+<?xml version="1.0" ?>
+<control>
+    <control_param name="aniOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="basinOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="basinOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="basinOut_freq">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="cascade_flag">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="cascadegw_flag">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="cbh_binary_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="cbh_check_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="csvON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dispGraphsBuffSize">
+        <default>50</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dprst_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dprst_transferON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_covden_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_covtype_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_dprst_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_fallfrost_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_imperv_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_intcp_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_potet_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_radtrncf_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_snareathresh_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_soil_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_springfrost_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_sro2dprst_imperv_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_sro2dprst_perv_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_transp_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dyn_transp_on_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="external_transferON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="gwr_swale_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="gwr_transferON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="init_vars_from_file">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="lake_transferON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="mapOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="naniOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="ndispGraphs">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOut_format">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOut_freq">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nmapOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOut_format">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOut_freq">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nstatVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOutON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOutVars">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOut_format">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOut_freq">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="orad_flag">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="parameter_check_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="print_debug">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="prms_warmup">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="save_vars_to_file">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="segment_transferON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="statsON_OFF">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="stream_temp_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="stream_temp_shade_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="strmtemp_humidity_flag">
+        <default>0</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="subbasin_flag">
+        <default>1</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="end_time">
+        <default>none</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="start_time">
+        <default>none</default>
+        <type>1</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="initial_deltat">
+        <default>24.0</default>
+        <type>2</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="ani_output_file">
+        <default>animation.out</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="basinOutBaseFileName">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="covden_sum_dynamic">
+        <default>dyncovsum</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="covden_win_dynamic">
+        <default>dyncovwin</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="covtype_dynamic">
+        <default>dyncovtype</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="csv_output_file">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dprst_depth_dynamic">
+        <default>dyndprst_depth</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dprst_frac_dynamic">
+        <default>dyndprst_frac</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dprst_transfer_file">
+        <default>dprst.transfer</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="et_module">
+        <default>potet_jh</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="executable_desc">
+        <default>MOWS</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="executable_model">
+        <default>prmsIV</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="external_transfer_file">
+        <default>ext.transfer</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="fallfrost_dynamic">
+        <default>dynfallfrost</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="gwr_transfer_file">
+        <default>gwr.transfer</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="humidity_day">
+        <default>humidity.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="imperv_frac_dynamic">
+        <default>dynimperv</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="imperv_stor_dynamic">
+        <default>dynimperv</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="lake_transfer_file">
+        <default>lake.transfer</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="model_mode">
+        <default>PRMS</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="model_output_file">
+        <default>prms.out</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOutBaseFileName">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOutBaseFileName">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOutBaseFileName">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="param_file">
+        <default>prms.params</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="potet_day">
+        <default>potet.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="potetcoef_dynamic">
+        <default>dynpotetcoef</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="precip_day">
+        <default>precip.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="precip_module">
+        <default>precip_1sta</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="radtrncf_dynamic">
+        <default>dynradtrncf</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="segment_transfer_file">
+        <default>seg.transfer</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="snareathresh_dynamic">
+        <default>NaN</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="snow_intcp_dynamic">
+        <default>dynsnowintcp</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="soilmoist_dynamic">
+        <default>dynsoilmost</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="soilrechr_dynamic">
+        <default>dynsoilrechr</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="soilzone_module">
+        <default>soilzone</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="solrad_module">
+        <default>ddsolrad</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="springfrost_dynamic">
+        <default>dynspringfrost</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="srain_intcp_dynamic">
+        <default>dynsrainintcp</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="sro2dprst_imperv_dyn">
+        <default>dynsrotodprst_imperv</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="sro2dprst_perv_dyn">
+        <default>dynsrotodprst_perv</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="srunoff_module">
+        <default>srunoff_smidx</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="stats_output_file">
+        <default>stats.out</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="statvar_file">
+        <default>statvar.out</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="strmflow_module">
+        <default>strmflow</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="swrad_day">
+        <default>swrad.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="temp_module">
+        <default>temp_1sta</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="tmax_day">
+        <default>tmax.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="tmin_day">
+        <default>tmin.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="transp_day">
+        <default>transp.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="transp_module">
+        <default>transp_tindex</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="transp_on_dynamic">
+        <default>0</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="transpbeg_dynamic">
+        <default>dyntranspbeg</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="transpend_dynamic">
+        <default>dyntranspend</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="var_init_file">
+        <default>prms_ic.in</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="var_save_file">
+        <default>prms_ic.out</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="windspeed_day">
+        <default>windspeed.day</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="wrain_intcp_dynamic">
+        <default>dynwrainintcp</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="aniOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="basinOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="data_file">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dispVar_element">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dispVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="dispVar_plot">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="mapOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nhruOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsegmentOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="nsubOutVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="statVar_element">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+    <control_param name="statVar_names">
+        <default>none</default>
+        <type>4</type>
+        <numvals>1</numvals>
+        <desc>empty</desc>
+    </control_param>
+</control>

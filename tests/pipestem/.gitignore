@@ -1,0 +1,4 @@
+output/*
+*.wbal
+*.out
+*.msgs
