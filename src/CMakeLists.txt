@@ -22,10 +22,10 @@ include(GNUInstallDirs)
 include(${CMAKE_MODULE_PATH}/FortranEnvironment.cmake)
 
 # Add the prms library source directory
-add_subdirectory(${CMAKE_SOURCE_DIR}/prmslib)
+#add_subdirectory(${CMAKE_SOURCE_DIR}/prmslib)
 
 # Add the directory which contains the source for the prms executable
-add_subdirectory(${CMAKE_SOURCE_DIR}/prms)
+#add_subdirectory(${CMAKE_SOURCE_DIR}/prms)
 
 #add the prms-bmi library source directory
 add_subdirectory(${CMAKE_SOURCE_DIR}/prms-bmi)
