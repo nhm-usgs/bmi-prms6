@@ -74,9 +74,8 @@ make
 sudo make install
 ```
  ## PRMS6-BMI
-The commands below work for now but I've got to change my repository to just contain the prms6 BMI code and probably rename the repository as such.  For now I just clone it into a different repository name - prms6-bmi
 ``` bash
-git clone git@code.usgs.gov:rmcd/prms6.git prms6-bmi
+git clone git@code.usgs.gov:rmcd/prms6-bmi.git
 cd prms6-bmi
 mkdir build
 cd build
