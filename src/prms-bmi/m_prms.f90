@@ -161,9 +161,10 @@
         !if (.not. this%model_time%next(ctl_data, this%model_basin)) exit
         ! print *, this%model_time%Nowyear, this%model_time%Nowmonth, this%model_time%Nowday
 
-        call this%model_temp%run(ctl_data, param_data, this%model_basin, this%model_time)
+        call this%model_temp%run(ctl_data, param_data, this%model_basin, this%model_time, this%summary_by_hru)
         ! print *, '1'
-        call this%model_precip%run(ctl_data, param_data, this%model_basin, this%model_temp, this%model_time)
+        call this%model_precip%run(ctl_data, param_data, this%model_basin, this%model_temp, this%model_time, &
+            this%summary_by_hru)
         ! call this%climate_by_hru%run(ctl_data, param_data, this%model_time, &
         !                              this%model_basin, this%potet, this%model_temp, &
         !                              this%climate)
@@ -218,11 +219,12 @@
         endif
 
         if (ctl_data%nhruOutON_OFF%value > 0) then
-            call this%summary_by_hru%run(ctl_data, this%model_time, this%model_basin, &
-                this%climate, this%groundwater, this%intcp, &
-                this%model_precip, this%potet, this%snow, &
-                this%soil, this%solrad, this%runoff, this%model_muskingum, &
-                this%model_temp, this%transpiration)
+            call this%summary_by_hru%run(ctl_data, this%model_time, this%model_basin)
+!            call this%summary_by_hru%run(ctl_data, this%model_time, this%model_basin, &
+!                this%climate, this%groundwater, this%intcp, &
+!                this%model_precip, this%potet, this%snow, &
+!                this%soil, this%solrad, this%runoff, this%model_muskingum, &
+!                this%model_temp, this%transpiration)
         endif
 
         if (ctl_data%print_debug%value == 1) then
