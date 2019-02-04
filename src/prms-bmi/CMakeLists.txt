@@ -1,4 +1,3 @@
-
 project(prmslibbmi VERSION 0.1 LANGUAGES Fortran)
 cmake_minimum_required(VERSION 3.8)
 
