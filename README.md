@@ -8,10 +8,10 @@ I'm using a VM with CentOS.  For compiling a new (recent - supports Fortran 2008
 ``` bash
 mkdir build
 cd build
-cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE-DEBUG -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/debug" -DBUILD_SHARED_LIBS=ON ../src
+cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/debug" -DBUILD_SHARED_LIBS=ON ../src
 make
 sudo make install
-cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE-RELEASE -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/release" -DBUILD_SHARED_LIBS=ON ../src
+cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/release" -DBUILD_SHARED_LIBS=ON ../src
 make
 sudo make install
 ```
