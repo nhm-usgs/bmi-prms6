@@ -33,7 +33,7 @@ surdo make install
 1) Download HDF from [HDF5® Source Code - The HDF Group](https://www.hdfgroup.org/downloads/hdf5/source-code/)
 2) Enter the following commands
 ``` bash
-cd hdf5-1.10.4/
+cd hdf5-1.10.5/
 H5DIR=/usr/local
 ./configure --with-zlib=${ZDIR} --prefix=${H5DIR} --enable-hl
 make check
