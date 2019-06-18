@@ -40,10 +40,10 @@ make check
 sudo make install
 ```
  ## Netcdf-c
-1) Download NetCDF (netcdf-c-4.6.2.tar.gz and netcdf-fortran-4.4.4.tar.gz) from [NetCDF Downloads](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp)
+1) Download NetCDF (netcdf-c-4.7.0.tar.gz and netcdf-fortran-4.4.5.tar.gz) from [NetCDF Downloads](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp)
 2) Enter the following commands 
 ``` bash
-cd netcdf-c-4.6.2/
+cd netcdf-c-4.7.0/
 CPPFLAGS='-I${H5DIR}/include -I${ZDIR}/include' LDFLAGS='-L{H5DIR}/lib -L${ZDIR}/lib' ./configure --prefix=${NCDIR}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${H5DIR}/lib
 make check
@@ -52,7 +52,7 @@ sudo make install
 
  ## NetCDF-Fortran
 ``` bash
-cd netcdf-fortran-4.4.4/
+cd netcdf-fortran-4.4.5/
 CC=/usr/local/cc
 FC=/usr/local/fortran
 export LD_LIBRARY_PATH=${NCDIR}/lib:${LD_LIBRARY_PATH}
