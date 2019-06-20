@@ -41,7 +41,8 @@ sudo make install
 ```
  ## Netcdf-c
 1) Download NetCDF (netcdf-c-4.7.0.tar.gz and netcdf-fortran-4.4.5.tar.gz) from [NetCDF Downloads](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp)
-2) Enter the following commands 
+2) Requires curl
+3) Enter the following commands 
 ``` bash
 cd netcdf-c-4.7.0/
 NCDIR=/usr/local
