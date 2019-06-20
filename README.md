@@ -55,11 +55,11 @@ sudo make install
  ## NetCDF-Fortran
 ``` bash
 cd netcdf-fortran-4.4.5/
-CC=/usr/local/cc
-FC=/usr/local/fortran
+#CC=/usr/local/cc
+#FC=/usr/local/fortran
 export LD_LIBRARY_PATH=${NCDIR}/lib:${LD_LIBRARY_PATH}
 NFDIR=/usr/local
-CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix${NFDIR}
+CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR}
 make check
 sudo make install
 ```
