@@ -46,7 +46,7 @@ sudo make install
 ``` bash
 cd netcdf-c-4.7.0/
 NCDIR=/usr/local
-CPPFLAGS='-I${H5DIR}/include -I${ZDIR}/include' LDFLAGS='-L{H5DIR}/lib -L${ZDIR}/lib' ./configure --prefix=${NCDIR}
+CPPFLAGS='-I${H5DIR}/include -I${ZDIR}/include' LDFLAGS='-L${H5DIR}/lib -L${ZDIR}/lib' ./configure --prefix=${NCDIR}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${H5DIR}/lib
 make check
 sudo make install
