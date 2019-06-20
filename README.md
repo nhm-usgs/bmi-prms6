@@ -71,7 +71,7 @@ cd prms6
 git checkout develoment
 mkdir build
 cd build
-cmake -DCMAKE_FORTRAN_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran -CDMAKE_BUILD_TYPE=DEBUG -DCMAKE_INTSALL_PREFIX=/usr/local -DBUILD_SHARED_LIBS=ON -DCMAKE_PREFIX_PATH=/usr/local/lib/cmake ../src
+cmake -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INTSALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON -DCMAKE_PREFIX_PATH=/usr/local/coretran/debug/lib/cmake/ ../src
 make
 sudo make install
 ```
