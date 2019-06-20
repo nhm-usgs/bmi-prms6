@@ -43,8 +43,8 @@ sudo make install
 1) Download NetCDF (netcdf-c-4.7.0.tar.gz and netcdf-fortran-4.4.5.tar.gz) from [NetCDF Downloads](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp)
 2) Enter the following commands 
 ``` bash
-NCDIR=/usr/local
 cd netcdf-c-4.7.0/
+NCDIR=/usr/local
 CPPFLAGS='-I${H5DIR}/include -I${ZDIR}/include' LDFLAGS='-L{H5DIR}/lib -L${ZDIR}/lib' ./configure --prefix=${NCDIR}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${H5DIR}/lib
 make check
