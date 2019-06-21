@@ -1,7 +1,7 @@
 ## Create the PRMS program
 project(prmsbmiapp LANGUAGES Fortran)
 
-add_executable(${PROJECT_NAME} Main_prms_BMI.f90)
+add_executable(${PROJECT_NAME} main.f90)
 target_link_libraries(${PROJECT_NAME} PRIVATE prmslib)
 target_link_libraries(${PROJECT_NAME} PRIVATE prmslibbmi)
 

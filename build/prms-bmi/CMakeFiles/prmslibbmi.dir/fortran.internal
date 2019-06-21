@@ -1,5 +1,0 @@
-# The fortran modules provided by this target.
-provides
- bmif.mod
- bmiprms.mod
- m_prms.mod
