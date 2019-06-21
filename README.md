@@ -1,6 +1,6 @@
 Compile PRMS6-BMI
 
-I'm using a VM with CentOS.  For compiling a new (recent - supports Fortran 2008) version of gFortran is required.  I used Devtoolset-7 from https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7 . Once downloaded it can be instantiated by:
+I used Devtoolset-7 from https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7 . Once downloaded it can be instantiated by:
 1) scl enable devtoolset-7 bash
  # Coretran
 1) clone coretran from: [GitHub - leonfoks/coretran: An easy to follow library to make Fortran easier in general with wrapped interfaces, sorting routines, kD-Trees, and other algorithms to handle scientific data and concepts. The library contains core fortran routines and object-oriented classes.](https://github.com/leonfoks/coretran)
