@@ -81,6 +81,6 @@ git clone git@code.usgs.gov:rmcd/prms6-bmi.git
 cd prms6-bmi
 mkdir build
 cd build
-cmake -DCMAKE_FORTRAN_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran  -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_PREFIX_PATH=/usr/local/coretran/debug/lib/cmake/ -DBUILD_SHARED_LIBS=ON ../src
+cmake -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran  -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_PREFIX_PATH=/usr/local/coretran/debug/lib/cmake/ -DBUILD_SHARED_LIBS=ON ../src
 make
 ```
