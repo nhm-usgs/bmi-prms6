@@ -9,4 +9,6 @@ lib/
 CMakeFiles
 cmake_install.cmake
 Makefile
+.directory
+.vscode/
 
