@@ -1,5 +1,6 @@
 # The BMI spec is "baked in" to the bmi-prms shared object.
-add_library(${bmiprms6_lib} SHARED m_prms.f90 bmi_prms.f90 bmi.f90)
+add_library(${bmiprms6_lib_s} SHARED m_prms.f90 bmi_prms.f90 bmi.f90)
+add_library(${bmiprms6_lib} STATIC m_prms.f90 bmi_prms.f90 bmi.f90)
 target_link_libraries(${bmiprms6_lib} ${EXTRA_LIBS})
 
 add_executable(run_${bmiprms6_lib} main.f90)

@@ -4,8 +4,8 @@
     ! use, intrinsic :: iso_c_binding, only: c_sizeof
     use, intrinsic :: iso_fortran_env, only: output_unit
     use Control_class, only: Control
-    use Parameters_class, only: Parameters
     use Simulation_class, only: Simulation
+    use PRMS_BASIN, only: Basin
     ! use ieee_arithmetic
     ! use ieee_features
     implicit none
@@ -14,7 +14,7 @@
         !! Name of the control file
         type(Control) :: control_data
         !! Class of control file related parameters
-        type(Parameters) :: parameter_data
+        type(Basin) :: parameter_data
         !! Class of input parameters
         type(Simulation) :: model_simulation
         !! PRMS model simulation class
@@ -43,7 +43,7 @@
     use variableKind
     use prms_constants
     use Control_class, only: Control
-    use Parameters_class, only: Parameters
+    !use Parameters_class, only: Parameters
     use Simulation_class, only: Simulation
     use, intrinsic :: iso_fortran_env, only: output_unit
     implicit none
@@ -74,7 +74,8 @@
         write(output_unit, fmt='(a)') repeat('=', 72)
         !call get_control_filename(control_filename)
 
-        control_data = Control(config_file)
+        !control_data = Control(config_file)
+        call Control_data%init(config_file)
 
         ! TODO: Other stuff to consider
         ! - variable: kkiter; Current iteration in GSFLOW simulation (when model_mode=GSFLOW)
@@ -84,13 +85,18 @@
 
         ! TODO: How to handle allocation and reading of parameter variables depending
         !       on which physics modules are selected?
-        parameter_data = Parameters(Control_data)
+        !parameter_data = Parameters(Control_data)
 
         ! TODO: Need routines for setting up output variables
 
 
         ! Initialize the simulation object
-        model_simulation = Simulation(Control_data, Parameter_data)
+        !model_simulation = Simulation(Control_data, Parameter_data)
+        call model_simulation%init(Control_data)
+        
+        ! 2019-08-08 PAN: This is rather kludgy...
+        ! Close the parameter file
+        call Control_data%param_file_hdl%close()
 
         write(output_unit, fmt='(a)') repeat('=', 72)
     end associate
@@ -138,7 +144,7 @@
         !else
         !    call solve_prms(model) 
         !endif
-    if(this%model_time%next(ctl_data, this%model_basin)) then
+    if(this%model_time%next(ctl_data)) then
         call solve_prms(model)
     endif
     end associate
@@ -146,93 +152,84 @@
     end subroutine advance_in_time
     
     subroutine solve_prms(model)
+    use iso_fortran_env, only: output_unit
     implicit none
     type(prms_model), intent(inout) :: model
     !! Name of the control file
     type(Control) :: ctl_data
     !! Class of control file related parameters
-    type(Parameters) :: param_data
+    !type(Parameters) :: param_data
     !! Class of input parameters
     type(Simulation) :: this
     !! PRMS model simulation class
     associate(  this =>model%model_simulation, &
-        ctl_data => model%control_data, &
-        param_data => model%parameter_data)
+        ctl_data => model%control_data)
         !if (.not. this%model_time%next(ctl_data, this%model_basin)) exit
         ! print *, this%model_time%Nowyear, this%model_time%Nowmonth, this%model_time%Nowday
 
-        call this%model_temp%run(ctl_data, param_data, this%model_basin, this%model_time, this%summary_by_hru)
+        call this%model_basin%run(ctl_data, this%model_time)
+        call this%model_temp%run(ctl_data, this%model_basin, this%model_time, this%model_summary)
         ! print *, '1'
-        call this%model_precip%run(ctl_data, param_data, this%model_basin, this%model_temp, this%model_time, &
-            this%summary_by_hru)
+        call this%model_precip%run(ctl_data, this%model_basin, this%model_temp, this%model_time, &
+            this%model_summary)
         ! call this%climate_by_hru%run(ctl_data, param_data, this%model_time, &
         !                              this%model_basin, this%potet, this%model_temp, &
         !                              this%climate)
         ! print *, '2'
-        call this%solrad%run(ctl_data, param_data, this%model_time, this%model_obs, &
-            this%model_precip, this%model_basin, this%model_temp)
+        call this%solrad%run(ctl_data, this%model_time, &
+                             this%model_precip, this%model_basin, this%model_temp)
 
         ! print *, '3'
-        call this%transpiration%run(ctl_data, param_data, this%model_time, &
-            this%model_basin, this%model_temp)
+        call this%transpiration%run(ctl_data, this%model_time, &
+                                    this%model_basin, this%model_temp)
 
         ! print *, '4'
-        call this%potet%run(ctl_data, param_data, this%model_basin, this%model_time, &
-            this%solrad, this%model_temp)
+        call this%potet%run(ctl_data, this%model_basin, this%model_time, &
+                           this%solrad, this%model_temp)
 
         ! print *, '5'
-        call this%intcp%run(ctl_data, param_data, this%model_basin, this%potet, &
-            this%model_precip, this%transpiration, this%climate, this%model_time)
+        call this%intcp%run(ctl_data, this%model_basin, this%potet, &
+                            this%model_precip, this%transpiration, this%climate, this%model_time)
 
         ! print *, '6'
-        call this%snow%run(this%climate, ctl_data, param_data, this%model_time, &
-            this%model_basin, this%model_precip, this%model_temp, &
-            this%intcp, this%solrad, this%potet, this%transpiration)
+        call this%snow%run(ctl_data, this%model_basin, this%model_time, this%climate, &
+                           this%model_precip, this%model_temp, &
+                           this%intcp, this%solrad, this%potet, this%transpiration)
 
         ! print *, '7'
-        call this%runoff%run(ctl_data, param_data, this%model_basin, this%climate, &
-            this%potet, this%intcp, this%snow, this%model_time)
+        call this%runoff%run(ctl_data, this%model_basin, this%climate, &
+                             this%potet, this%intcp, this%snow, this%model_time)
 
         ! print *, '8'
-        call this%soil%run(ctl_data, param_data, this%model_basin, this%model_time, &
-            this%potet, this%model_precip, this%climate, this%intcp, &
-            this%snow, this%transpiration, this%runoff)
-
+        call this%soil%run(ctl_data, this%model_basin, this%model_time, &
+                           this%potet, this%model_precip, this%climate, this%intcp, &
+                           this%snow, this%transpiration, this%runoff)
         ! print *, '9'
-        call this%groundwater%run(ctl_data, param_data, this%model_basin, &
-            this%climate, this%intcp, this%soil, this%runoff, &
-            this%model_time)
+        call this%groundwater%run(ctl_data, this%model_basin, &
+                                  this%climate, this%intcp, this%soil, this%runoff, &
+                                  this%model_time)
 
         ! call this%model_route%run(ctl_data, param_data, this%model_basin, this%climate, this%groundwater, this%soil, this%runoff, this%model_time, this%solrad)
 
         ! print *, '10'
-        call this%model_muskingum%run(ctl_data, param_data, this%model_basin, &
-            this%potet, this%groundwater, this%soil, &
-            this%runoff, this%model_time, this%solrad, &
-            this%model_obs)
+        call this%model_streamflow%run(ctl_data, this%model_basin, &
+                                      this%potet, this%groundwater, this%soil, &
+                                      this%runoff, this%model_time, this%solrad, &
+                                      this%model_obs)
 
         ! ctl_data, param_data, model_basin, model_climate, groundwater, soil, runoff, &
         !   model_time, model_solrad, model_flow, model_obs
 
-        if (ctl_data%basinOutON_OFF%value == 1) then
-            call this%summary_by_basin%run(ctl_data, this%model_time)
-        endif
-
-        if (ctl_data%nhruOutON_OFF%value > 0) then
-            call this%summary_by_hru%run(ctl_data, this%model_time, this%model_basin)
-!            call this%summary_by_hru%run(ctl_data, this%model_time, this%model_basin, &
-!                this%climate, this%groundwater, this%intcp, &
-!                this%model_precip, this%potet, this%snow, &
-!                this%soil, this%solrad, this%runoff, this%model_muskingum, &
-!                this%model_temp, this%transpiration)
-        endif
+        if (ctl_data%outVarON_OFF%value == 1) then
+          call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
+        end if
 
         if (ctl_data%print_debug%value == 1) then
-            call this%model_waterbal%run(ctl_data, param_data, this%model_basin, &
-                this%climate, this%groundwater, this%intcp, &
-                this%model_precip, this%snow, this%soil, &
-                this%runoff, this%model_time)
+          call this%model_waterbal%run(ctl_data, this%model_basin, &
+                                       this%climate, this%groundwater, this%intcp, &
+                                       this%model_precip, this%snow, this%soil, &
+                                       this%runoff, this%model_time)
         endif
-    end associate
+        end associate
     end subroutine solve_prms
     end module m_prms

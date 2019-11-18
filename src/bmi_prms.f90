@@ -352,10 +352,10 @@
 
     select case(grid_id)
     case(0)
-        grid_size = self%model%control_data%nhru%value
+        grid_size = self%model%parameter_data%nhru
         bmi_status = BMI_SUCCESS
     case(1)
-        grid_size = self%model%control_data%nsegment%value
+        grid_size = self%model%parameter_data%nsegment
         bmi_status = BMI_SUCCESS
         case default
         grid_size = -1
@@ -406,7 +406,7 @@
 
     select case(grid_id)
     case(0)
-        grid_x = self%model%parameter_data%hru_x%values
+        grid_x = self%model%parameter_data%hru_x
         bmi_status = BMI_SUCCESS
         case default
         grid_x = [-1.0]
@@ -423,7 +423,7 @@
 
     select case(grid_id)
     case(0)
-        grid_y = self%model%parameter_data%hru_y%values
+        grid_y = self%model%parameter_data%hru_y
         bmi_status = BMI_SUCCESS
         case default
         grid_y = [-1.0]
@@ -440,7 +440,7 @@
 
     select case(grid_id)
     case(0)
-        grid_z = self%model%parameter_data%hru_elev%values
+        grid_z = self%model%parameter_data%hru_elev
         bmi_status = BMI_SUCCESS
         case default
         grid_z = [-1.0]

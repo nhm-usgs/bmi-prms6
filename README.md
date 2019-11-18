@@ -1,86 +1,25 @@
 Compile PRMS6-BMI
 
-I used Devtoolset-7 from https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7 . Once downloaded it can be instantiated by:
-1) scl enable devtoolset-7 bash
- # Coretran
-1) clone coretran from: [GitHub - leonfoks/coretran: An easy to follow library to make Fortran easier in general with wrapped interfaces, sorting routines, kD-Trees, and other algorithms to handle scientific data and concepts. The library contains core fortran routines and object-oriented classes.](https://github.com/leonfoks/coretran)
-2) In coretran directory - watch for long lines below
-``` bash
-mkdir build
-cd build
-cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/debug" -DBUILD_SHARED_LIBS=ON ../src
-make
-sudo make install
-cmake -DCMAKE_Fortran_COMPILER=opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX="/usr/local/coretran/release" -DBUILD_SHARED_LIBS=ON ../src
-make
-sudo make install
-```
- # HDF and NetCDF
-The following directions essentially follow the directions from Here: [NetCDF: Getting and Building netCDF](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
+### build bmi-prms6
+* cd to your repos folder and clone prms6 [GitHub - nhm-usgs/bmi-prms6](https://github.com/nhm-usgs/bmi-prms6)
+* Execute the following commands in the __x64 Native Tools Command Prompt for VS 2017__ command prompt
 
- ## zlib
-1) Download zlib from [zlib Home Site](http://www.zlib.net/)
-2) Enter the following commands
-``` bash 
-cd zlib-1.2.11
-ZDIR=/usr/local
-./configure --prefix=${ZDIR}
-make check
-surdo make install
+```bash
+cmake .. -DCMAKE_BUILD_TYPE=DEBUG^
+-DCMAKE_INSTALL_PREFIX="B:/BuildNetcdf/install"^
+-DCMAKE_PREFIX_PATH="B:/BuildNetcdf/install/lib/cmake"^
+-DBUILD_SHARED_LIBS=FALSE^
+-Dcoretran_lib="B:/BuildNetcdf/install/lib/coretran.lib"^
+-Dcoretranlibmod="B:/BuildNetcdf/install/include/coretran/Release"^
+-Dnetcdf_lib="B:/BuildNetcdf/install/lib/netcdf.lib"^
+-Dnetcdff_lib="B:/BuildNetcdf/install/lib/netcdff.lib"^
+-Dprms6_lib="B:/gitbmi/prms/_build/prmslib/Debug/prmslib.lib"^
+-Dprmslibmod="B:/gitbmi/prms/_build/prmslib/Debug"
 ```
-
- ## HDF
-1) Download HDF from [HDF5® Source Code - The HDF Group](https://www.hdfgroup.org/downloads/hdf5/source-code/)
-2) Enter the following commands
-``` bash
-cd hdf5-1.10.5/
-H5DIR=/usr/local
-./configure --with-zlib=${ZDIR} --prefix=${H5DIR} --enable-hl
-make check
-sudo make install
-```
- ## Netcdf-c
-1) Download NetCDF (netcdf-c-4.7.0.tar.gz and netcdf-fortran-4.4.5.tar.gz) from [NetCDF Downloads](https://www.unidata.ucar.edu/downloads/netcdf/index.jsp)
-2) Requires curl
-3) Enter the following commands 
-``` bash
-cd netcdf-c-4.7.0/
-NCDIR=/usr/local
-CPPFLAGS='-I${H5DIR}/include -I${ZDIR}/include' LDFLAGS='-L${H5DIR}/lib -L${ZDIR}/lib' ./configure --prefix=${NCDIR}
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${H5DIR}/lib
-make check
-sudo make install
-```
-
- ## NetCDF-Fortran
-``` bash
-cd netcdf-fortran-4.4.5/
-#CC=/usr/local/cc
-#FC=/usr/local/fortran
-export LD_LIBRARY_PATH=${NCDIR}/lib:${LD_LIBRARY_PATH}
-NFDIR=/usr/local
-CPPFLAGS=-I${NCDIR}/include LDFLAGS=-L${NCDIR}/lib ./configure --prefix=${NFDIR}
-make check
-sudo make install
-```
-
- ## PRMS6
-``` bash
-git clone git@code.usgs.gov:pnorton/prms6.git
-cd prms6
-git checkout develoment
-mkdir build
-cd build
-cmake -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INTSALL_PREFIX=/usr/local/ -DBUILD_SHARED_LIBS=ON -DCMAKE_PREFIX_PATH=/usr/local/coretran/debug/lib/cmake/ ../src
-make
-sudo make install
-```
- ## PRMS6-BMI
-``` bash
-git clone git@code.usgs.gov:rmcd/prms6-bmi.git
-cd prms6-bmi
-mkdir build
-cd build
-cmake -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran  -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_PREFIX_PATH=/usr/local/coretran/debug/lib/cmake/ -DBUILD_SHARED_LIBS=ON ../src
-make
-```
+##### Build in Visual Studio 2017
+* Open the bmi_prms6.sln in your ___build__ directory*
+* Make the following changes to the Properties dialog of both the __prms__ and __prmslib__ projects
+* For the bmiprms Property In the Linker | Command Line tab in hte Additional Options make sure there is /machine:x64
+* For the run_bmiprms Property In the Librarian | Command Line tab in hte Additional Options make sure there is /machine:x64)
+* For run_bmiprms Property, add to the Linker | General - Additional Library Directories: add the lib directories as follows "B:\BuildNetcdf\install\lib;B:\BuildNetcdf\install\1.10.5\lib"
+* For run_bmiprms  Property, add to the Linker | Input - Additional Dependencies: B:\gitbmi\bmi-prms6\_build\src\Debug\bmiprms.lib libhdf5.lib libhdf5_hl.lib libszip.lib libzlib.lib to the end of the exiting entries
