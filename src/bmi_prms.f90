@@ -1,7 +1,7 @@
     module bmiprms
 
     use m_prms
-    use bmif
+    use bmif_2_0
     use, intrinsic :: iso_c_binding, only: c_ptr, c_loc, c_f_pointer
     implicit none
 
@@ -10,6 +10,8 @@
         type (prms_model) :: model
     contains
     procedure :: get_component_name => prms_component_name
+    procedure :: get_input_item_count => prms_input_item_count
+    procedure :: get_output_item_count => prms_output_item_count
     procedure :: get_input_var_names => prms_input_var_names
     procedure :: get_output_var_names => prms_output_var_names
     procedure :: initialize => prms_initialize
@@ -20,7 +22,6 @@
     procedure :: get_time_step => prms_time_step
     procedure :: get_time_units => prms_time_units
     procedure :: update => prms_update
-    procedure :: update_frac => prms_update_frac
     procedure :: update_until => prms_update_until
     procedure :: get_var_grid => prms_var_grid
     procedure :: get_grid_type => prms_grid_type
@@ -32,12 +33,11 @@
     procedure :: get_grid_x => prms_grid_x
     procedure :: get_grid_y => prms_grid_y
     procedure :: get_grid_z => prms_grid_z
-    !procedure :: get_grid_connectivity => prms_grid_connectivity
-    !procedure :: get_grid_offset => prms_grid_offset
     procedure :: get_var_type => prms_var_type
     procedure :: get_var_units => prms_var_units
     procedure :: get_var_itemsize => prms_var_itemsize
     procedure :: get_var_nbytes => prms_var_nbytes
+    procedure :: get_var_location => prms_var_location
     !procedure :: get_value_int => prms_get_int
     !procedure :: get_value_float => prms_get_float
     !procedure :: get_value_double => prms_get_double
@@ -112,8 +112,8 @@
     contains
 
     ! Get the name of the model.
-    function prms_component_name(self, name) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_component_name(this, name) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     character (len=*), pointer, intent(out) :: name
     integer :: bmi_status
 
@@ -121,9 +121,29 @@
     bmi_status = BMI_SUCCESS
     end function prms_component_name
 
+    ! Count the input variables.
+    function prms_input_item_count(this, count) result (bmi_status)
+        class (bmi_prms), intent(in) :: this
+        integer, intent(out) :: count
+        integer :: bmi_status
+
+        count = input_item_count
+        bmi_status = BMI_SUCCESS
+     end function prms_input_item_count
+
+    ! Count the output variables.
+    function prms_output_item_count(this, count) result (bmi_status)
+        class (bmi_prms), intent(in) :: this
+        integer, intent(out) :: count
+        integer :: bmi_status
+
+        count = output_item_count
+        bmi_status = BMI_SUCCESS
+    end function prms_output_item_count
+
     ! List input variables.
-    function prms_input_var_names(self, names) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_input_var_names(this, names) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
 
@@ -132,8 +152,8 @@
     end function prms_input_var_names
 
     ! List output variables.
-    function prms_output_var_names(self, names) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_output_var_names(this, names) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
 
@@ -142,200 +162,183 @@
     end function prms_output_var_names
 
     ! BMI initializer.
-    function prms_initialize(self, config_file) result (bmi_status)
-    class (bmi_prms), intent(out) :: self
+    function prms_initialize(this, config_file) result (bmi_status)
+    class (bmi_prms), intent(out) :: this
     character (len=*), intent(in) :: config_file
     integer :: bmi_status
 
     if (len(config_file) > 0) then
-        call initialize_from_file(self%model, config_file)
+        call initialize_from_file(this%model, config_file)
     else
-        !call initialize_from_defaults(self%model)
+        !call initialize_from_defaults(this%model)
     end if
     bmi_status = BMI_SUCCESS
     end function prms_initialize
 
     ! BMI finalizer.
-    function prms_finalize(self) result (bmi_status)
-    class (bmi_prms), intent(inout) :: self
+    function prms_finalize(this) result (bmi_status)
+    class (bmi_prms), intent(inout) :: this
     integer :: bmi_status
 
-    call cleanup(self%model)
+    call cleanup(this%model)
     bmi_status = BMI_SUCCESS
     end function prms_finalize
 
     ! Model start time.
-    function prms_start_time(self, time) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_start_time(this, time) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     double precision, intent(out) :: time
     integer :: bmi_status
 
     time = 0.d0
-    !time = self%model%model_simulation%model_time%Timestep
+    !time = this%model%model_simulation%model_time%Timestep
     bmi_status = BMI_SUCCESS
     end function prms_start_time
 
     ! Model end time.
-    function prms_end_time(self, time) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_end_time(this, time) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     double precision, intent(out) :: time
     integer :: bmi_status
 
-    time = dble(self%model%model_simulation%model_time%Number_timesteps)
+    time = dble(this%model%model_simulation%model_time%Number_timesteps)
     bmi_status = BMI_SUCCESS
     end function prms_end_time
 
     ! Model current time.
-    function prms_current_time(self, time) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_current_time(this, time) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     double precision, intent(out) :: time
     integer :: bmi_status
 
-    time = dble(self%model%model_simulation%model_time%Timestep)
+    time = dble(this%model%model_simulation%model_time%Timestep)
     bmi_status = BMI_SUCCESS
     end function prms_current_time
 
     ! Model time step.
-    function prms_time_step(self, time_step) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
+    function prms_time_step(this, time_step) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
     double precision, intent(out) :: time_step
     integer :: bmi_status
 
-    time_step = dble(self%model%model_simulation%model_time%Timestep_seconds)
+    time_step = dble(this%model%model_simulation%model_time%Timestep_seconds)
     bmi_status = BMI_SUCCESS
     end function prms_time_step
 
     ! Model time units.
-    function prms_time_units(self, time_units) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    character (len=*), intent(out) :: time_units
+    function prms_time_units(this, units) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    character (len=*), intent(out) :: units
     integer :: bmi_status
 
-    time_units = "s"
+    units = "s"
     bmi_status = BMI_SUCCESS
     end function prms_time_units
 
     ! Advance model by one time step.
-    function prms_update(self) result (bmi_status)
-    class (bmi_prms), intent(inout) :: self
+    function prms_update(this) result (bmi_status)
+    class (bmi_prms), intent(inout) :: this
     integer :: bmi_status
 
-    call advance_in_time(self%model)
+    call advance_in_time(this%model)
     bmi_status = BMI_SUCCESS
     end function prms_update
 
-    ! Advance the model by a fraction of a time step.
-    function prms_update_frac(self, time_frac) result (bmi_status)
-    class (bmi_prms), intent(inout) :: self
-    double precision, intent(in) :: time_frac
-    integer :: bmi_status
-    real :: time_step
-
-    !if (time_frac > 0.0) then
-    !   time_step = self%model%dt
-    !   self%model%dt = time_step*real(time_frac)
-    !   call advance_in_time(self%model)
-    !   self%model%dt = time_step
-    !end if
-    write(*,"(a)") "PRMS operates on a daily time-step, update fraction of time-step not possible"
-    bmi_status = BMI_FAILURE
-    end function prms_update_frac
-
     ! Advance the model until the given time.
-    function prms_update_until(self, time) result (bmi_status)
-    class (bmi_prms), intent(inout) :: self
+    function prms_update_until(this, time) result (bmi_status)
+    class (bmi_prms), intent(inout) :: this
     double precision, intent(in) :: time
     double precision :: current_time, end_time, dt
     integer :: bmi_status
     double precision :: n_steps_real
     integer :: n_steps, i, s
-    s = self%get_current_time(current_time)
-    s = self%get_end_time(end_time)
-    s = self%get_time_step(dt)
+    s = this%get_current_time(current_time)
+    s = this%get_end_time(end_time)
+    s = this%get_time_step(dt)
     if (time > current_time) then
         n_steps_real = (time - current_time) / dt
         n_steps = floor(n_steps_real)
         do i = 1, n_steps
-            s = self%update()
+            s = this%update()
         end do
-        !s = self%update_frac(n_steps_real - dble(n_steps))
+        !s = this%update_frac(n_steps_real - dble(n_steps))
     end if
     bmi_status = BMI_SUCCESS
     end function prms_update_until
 
     ! Get the grid id for a particular variable.
-    function prms_var_grid(self, var_name, grid_id) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    character (len=*), intent(in) :: var_name
-    integer, intent(out) :: grid_id
+    function prms_var_grid(this, name, grid) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(out) :: grid
     integer :: bmi_status
 
-    select case(var_name)
+    select case(name)
     case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', 'hru_y', 'hru_elev')
-        grid_id = 0
+        grid = 0
         bmi_status = BMI_SUCCESS
     case('seg_gwflow', 'seg_inflow', 'seg_outflow')
-        grid_id = 1
+        grid = 1
         bmi_status = BMI_SUCCESS
         !case('model__identification_number')
-        !   grid_id = 1
+        !   type = 1
         !   bmi_status = BMI_SUCCESS
         case default
-        grid_id = -1
+        grid = -1
         bmi_status = BMI_FAILURE
     end select
     end function prms_var_grid
 
     ! The type of a variable's grid.
-    function prms_grid_type(self, grid_id, grid_type) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    character (len=*), intent(out) :: grid_type
+    function prms_grid_type(this, grid, type) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    character (len=*), intent(out) :: type
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_type = "unstructured"
+        type = "unstructured"
         bmi_status = BMI_SUCCESS
     case(1)
-        grid_type = "unstructured"
+        type = "unstructured"
         bmi_status = BMI_SUCCESS
         case default
-        grid_type = "-"
+        type = "-"
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_type
 
     ! The number of dimensions of a grid.
-    function prms_grid_rank(self, grid_id, grid_rank) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    integer, intent(out) :: grid_rank
+    function prms_grid_rank(this, grid, rank) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    integer, intent(out) :: rank
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_rank = 1
+        rank = 1
         bmi_status = BMI_SUCCESS
     case(1)
-        grid_rank = 1
+        rank = 1
         bmi_status = BMI_SUCCESS
         case default
-        grid_rank = -1
+        rank = -1
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_rank
 
     !! The dimensions of a grid.
-    !function prms_grid_shape(self, grid_id, grid_shape) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  integer, intent(in) :: grid_id
+    !function prms_grid_shape(this, type, grid_shape) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  integer, intent(in) :: type
     !  integer, dimension(:), intent(out) :: grid_shape
     !  integer :: bmi_status
     !
-    !  select case(grid_id)
+    !  select case(type)
     !  case(0)
-    !     grid_shape = self%model%control_data%nhru%value
+    !     grid_shape = this%model%control_data%nhru%value
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     grid_shape = [-1]
@@ -344,35 +347,35 @@
     !end function prms_grid_shape
     !
     ! The total number of elements in a grid.
-    function prms_grid_size(self, grid_id, grid_size) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    integer, intent(out) :: grid_size
+    function prms_grid_size(this, grid, size) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    integer, intent(out) :: size
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_size = self%model%parameter_data%nhru
+        size = this%model%parameter_data%nhru
         bmi_status = BMI_SUCCESS
     case(1)
-        grid_size = self%model%parameter_data%nsegment
+        size = this%model%parameter_data%nsegment
         bmi_status = BMI_SUCCESS
         case default
-        grid_size = -1
+        size = -1
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_size
 
     !! The distance between nodes of a grid.
-    !function prms_grid_spacing(self, grid_id, grid_spacing) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  integer, intent(in) :: grid_id
+    !function prms_grid_spacing(this, type, grid_spacing) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  integer, intent(in) :: type
     !  real, dimension(:), intent(out) :: grid_spacing
     !  integer :: bmi_status
     !
-    !  select case(grid_id)
+    !  select case(type)
     !  case(0)
-    !     grid_spacing = [self%model%dy, self%model%dx]
+    !     grid_spacing = [this%model%dy, this%model%dx]
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     grid_spacing = -1
@@ -381,13 +384,13 @@
     !end function prms_grid_spacing
     !
     !! Coordinates of grid origin.
-    !function prms_grid_origin(self, grid_id, grid_origin) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  integer, intent(in) :: grid_id
+    !function prms_grid_origin(this, type, grid_origin) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  integer, intent(in) :: type
     !  real, dimension(:), intent(out) :: grid_origin
     !  integer :: bmi_status
     !
-    !  select case(grid_id)
+    !  select case(type)
     !  case(0)
     !     grid_origin = [0.0, 0.0]
     !     bmi_status = BMI_SUCCESS
@@ -398,194 +401,171 @@
     !end function prms_grid_origin
     !
     ! X-coordinates of grid nodes.
-    function prms_grid_x(self, grid_id, grid_x) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    real, dimension(:), intent(out) :: grid_x
+    function prms_grid_x(this, grid, x) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    double precision, dimension(:), intent(out) :: x
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_x = self%model%parameter_data%hru_x
+        x = this%model%parameter_data%hru_x
         bmi_status = BMI_SUCCESS
         case default
-        grid_x = [-1.0]
+        x = [-1.0]
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_x
 
     ! Y-coordinates of grid nodes.
-    function prms_grid_y(self, grid_id, grid_y) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    real, dimension(:), intent(out) :: grid_y
+    function prms_grid_y(this, grid, y) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    double precision, dimension(:), intent(out) :: y
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_y = self%model%parameter_data%hru_y
+        y = this%model%parameter_data%hru_y
         bmi_status = BMI_SUCCESS
         case default
-        grid_y = [-1.0]
+        y = [-1.0]
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_y
 
     ! Z-coordinates of grid nodes.
-    function prms_grid_z(self, grid_id, grid_z) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    integer, intent(in) :: grid_id
-    real, dimension(:), intent(out) :: grid_z
+    function prms_grid_z(this, grid, z) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    integer, intent(in) :: grid
+    double precision, dimension(:), intent(out) :: z
     integer :: bmi_status
 
-    select case(grid_id)
+    select case(grid)
     case(0)
-        grid_z = self%model%parameter_data%hru_elev
+        z = this%model%parameter_data%hru_elev
         bmi_status = BMI_SUCCESS
         case default
-        grid_z = [-1.0]
+        z = [-1.0]
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_z
-
-    !! Connectivity array of unstructured grid nodes.
-    !function prms_grid_connectivity(self, grid_id, grid_conn) &
-    !     result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  integer, intent(in) :: grid_id
-    !  integer, dimension(:), intent(out) :: grid_conn
-    !  integer :: bmi_status
-    !
-    !  select case(grid_id)
-    !  case(1)
-    !     grid_conn = [0]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     grid_conn = [-1]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_grid_connectivity
-    !
-    !! Offsets of unstructured grid nodes.
-    !function prms_grid_offset(self, grid_id, grid_offset) &
-    !     result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  integer, intent(in) :: grid_id
-    !  integer, dimension(:), intent(out) :: grid_offset
-    !  integer :: bmi_status
-    !
-    !  select case(grid_id)
-    !  case(1)
-    !     grid_offset = [0]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     grid_offset = [-1]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_grid_offset
     !
     ! The data type of the variable, as a string.
-    function prms_var_type(self, var_name, var_type) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    character (len=*), intent(in) :: var_name
-    character (len=*), intent(out) :: var_type
+    function prms_var_type(this, name, type) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    character (len=*), intent(in) :: name
+    character (len=*), intent(out) :: type
     integer :: bmi_status
 
-    select case(var_name)
+    select case(name)
     case("hru_ppt", "hru_snow", "hru_rain", "hortonian_lakes", &
         "hru_actet")
-        var_type = "real"
+        type = "real"
         bmi_status = BMI_SUCCESS
     case("seg_gwflow", "seg_inflow", "seg_outflow")
-        var_type = "double"
+        type = "double"
         bmi_status = BMI_SUCCESS
     case("is_rain_day")
-        var_type = "integer"
+        type = "integer"
         bmi_status = BMI_SUCCESS
     case default
-        var_type = "-"
+        type = "-"
         bmi_status = BMI_FAILURE
     end select
     end function prms_var_type
 
     ! The units of the given variable.
-    function prms_var_units(self, var_name, var_units) result (bmi_status)
-    class (bmi_prms), intent(in) :: self
-    character (len=*), intent(in) :: var_name
-    character (len=*), intent(out) :: var_units
+    function prms_var_units(this, name, units) result (bmi_status)
+    class (bmi_prms), intent(in) :: this
+    character (len=*), intent(in) :: name
+    character (len=*), intent(out) :: units
     integer :: bmi_status
 
-    select case(var_name)
+    select case(name)
     case("hru_ppt", "hru_snow", "hru_rain", "hortonian_lakes", &
         "hru_actet","seg_gwflow")
-        var_units = "in"
+        units = "in"
         bmi_status = BMI_SUCCESS
     case("seg_inflow", "seg_outflow")
-        var_units = "ft3 s-1"
+        units = "ft3 s-1"
         bmi_status = BMI_SUCCESS
     case("is_rain_day")
-        var_units = "none"
+        units = "none"
         bmi_status = BMI_SUCCESS
         case default
-        var_units = "-"
+        units = "-"
         bmi_status = BMI_FAILURE
     end select
     end function prms_var_units
 
     ! Memory use per array element.
-    function prms_var_itemsize(self, var_name, var_size) result (bmi_status)
-      class (bmi_prms), intent(in) :: self
-      character (len=*), intent(in) :: var_name
-      integer, intent(out) :: var_size
+    function prms_var_itemsize(this, name, size) result (bmi_status)
+      class (bmi_prms), intent(in) :: this
+      character (len=*), intent(in) :: name
+      integer, intent(out) :: size
       integer :: bmi_status
     
-      select case(var_name)
+      select case(name)
       case("hru_ppt")
-         var_size = sizeof(self%model%model_simulation%model_precip%hru_ppt(1))  ! 'sizeof' in gcc & ifort
+         size = sizeof(this%model%model_simulation%model_precip%hru_ppt(1))  ! 'sizeof' in gcc & ifort
          bmi_status = BMI_SUCCESS
       !case("plate_surface__thermal_diffusivity")
-      !   var_size = sizeof(self%model%alpha)             ! 'sizeof' in gcc & ifort
+      !   var_size = sizeof(this%model%alpha)             ! 'sizeof' in gcc & ifort
       !   bmi_status = BMI_SUCCESS
       !case("model__identification_number")
-      !   var_size = sizeof(self%model%id)                ! 'sizeof' in gcc & ifort
+      !   var_size = sizeof(this%model%id)                ! 'sizeof' in gcc & ifort
       !   bmi_status = BMI_SUCCESS
       case default
-         var_size = -1
+         size = -1
          bmi_status = BMI_FAILURE
       end select
     end function prms_var_itemsize
     
     ! The size of the given variable.
-    function prms_var_nbytes(self, var_name, var_nbytes) result (bmi_status)
-      class (bmi_prms), intent(in) :: self
-      character (len=*), intent(in) :: var_name
-      integer, intent(out) :: var_nbytes
+    function prms_var_nbytes(this, name, nbytes) result (bmi_status)
+      class (bmi_prms), intent(in) :: this
+      character (len=*), intent(in) :: name
+      integer, intent(out) :: nbytes
       integer :: bmi_status
-      integer :: s1, s2, s3, grid_id, grid_size, item_size
+      integer :: s1, s2, s3, type, grid_size, item_size
     
-      s1 = self%get_var_grid(var_name, grid_id)
-      s2 = self%get_grid_size(grid_id, grid_size)
-      s3 = self%get_var_itemsize(var_name, item_size)
+      s1 = this%get_var_grid(name, type)
+      s2 = this%get_grid_size(type, grid_size)
+      s3 = this%get_var_itemsize(name, item_size)
     
       if ((s1 == BMI_SUCCESS).and.(s2 == BMI_SUCCESS).and.(s3 == BMI_SUCCESS)) then
-         var_nbytes = item_size * grid_size
+         nbytes = item_size * grid_size
          bmi_status = BMI_SUCCESS
       else
-         var_nbytes = -1
+         nbytes = -1
          bmi_status = BMI_FAILURE
       end if
     end function prms_var_nbytes
     
+  ! The location (node, face, edge) of the given variable.
+    function prms_var_location(this, name, location) result (bmi_status)
+        class (bmi_prms), intent(in) :: this
+        character (len=*), intent(in) :: name
+        character (len=*), intent(out) :: location
+        integer :: bmi_status
+
+        select case(name)
+        case default
+           location = "face"
+           bmi_status = BMI_SUCCESS
+        end select
+    end function prms_var_location
     !! Get a copy of a integer variable's values, flattened.
-    !function prms_get_int(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_int(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("model__identification_number")
-    !     dest = [self%model%id]
+    !     dest = [this%model%id]
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     dest = [-1]
@@ -594,28 +574,28 @@
     !end function prms_get_int
     !
     !! Get a copy of a real variable's values, flattened.
-    !function prms_get_float(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_float(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  real, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("plate_surface__temperature")
     !     ! This would be safe, but subject to indexing errors.
-    !     ! do j = 1, self%model%n_y
-    !     !    do i = 1, self%model%n_x
-    !     !       k = j + self%model%n_y*(i-1)
-    !     !       dest(k) = self%model%temperature(j,i)
+    !     ! do j = 1, this%model%n_y
+    !     !    do i = 1, this%model%n_x
+    !     !       k = j + this%model%n_y*(i-1)
+    !     !       dest(k) = this%model%temperature(j,i)
     !     !    end do
     !     ! end do
     !
     !     ! This is an equivalent, elementwise copy into `dest`.
     !     ! See https://stackoverflow.com/a/11800068/1563298
-    !     dest = reshape(self%model%temperature, [self%model%n_x*self%model%n_y])
+    !     dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
     !     bmi_status = BMI_SUCCESS
     !  case("plate_surface__thermal_diffusivity")
-    !     dest = [self%model%alpha]
+    !     dest = [this%model%alpha]
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     dest = [-1.0]
@@ -624,13 +604,13 @@
     !end function prms_get_float
     !
     !! Get a copy of a double variable's values, flattened.
-    !function prms_get_double(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_double(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  double precision, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     dest = [-1.d0]
     !     bmi_status = BMI_FAILURE
@@ -638,33 +618,33 @@
     !end function prms_get_double
     !
     !! Get a reference to an integer-valued variable, flattened.
-    !function prms_get_ref_int(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_ref_int(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, pointer, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !  type (c_ptr) :: src
     !  integer :: n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_get_ref_int
     !
     !! Get a reference to a real-valued variable, flattened.
-    !function prms_get_ref_float(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_ref_float(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  real, pointer, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !  type (c_ptr) :: src
     !  integer :: n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("plate_surface__temperature")
-    !     src = c_loc(self%model%temperature(1,1))
-    !     n_elements = self%model%n_y * self%model%n_x
+    !     src = c_loc(this%model%temperature(1,1))
+    !     n_elements = this%model%n_y * this%model%n_x
     !     call c_f_pointer(src, dest, [n_elements])
     !     bmi_status = BMI_SUCCESS
     !  case default
@@ -673,25 +653,25 @@
     !end function prms_get_ref_float
     !
     !! Get a reference to an double-valued variable, flattened.
-    !function prms_get_ref_double(self, var_name, dest) result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_get_ref_double(this, name, dest) result (bmi_status)
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  double precision, pointer, intent(inout) :: dest(:)
     !  integer :: bmi_status
     !  type (c_ptr) :: src
     !  integer :: n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_get_ref_double
     !
     !! Get values of an integer variable at the given locations.
-    !function prms_get_at_indices_int(self, var_name, dest, indices) &
+    !function prms_get_at_indices_int(this, name, dest, indices) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(inout) :: dest(:)
     !  integer, intent(in) :: indices(:)
     !  integer :: bmi_status
@@ -699,17 +679,17 @@
     !  integer, pointer :: src_flattened(:)
     !  integer :: i, n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_get_at_indices_int
     !
     !! Get values of a real variable at the given locations.
-    !function prms_get_at_indices_float(self, var_name, dest, indices) &
+    !function prms_get_at_indices_float(this, name, dest, indices) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  real, intent(inout) :: dest(:)
     !  integer, intent(in) :: indices(:)
     !  integer :: bmi_status
@@ -717,10 +697,10 @@
     !  real, pointer :: src_flattened(:)
     !  integer :: i, n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("plate_surface__temperature")
-    !     src = c_loc(self%model%temperature(1,1))
-    !     call c_f_pointer(src, src_flattened, [self%model%n_y * self%model%n_x])
+    !     src = c_loc(this%model%temperature(1,1))
+    !     call c_f_pointer(src, src_flattened, [this%model%n_y * this%model%n_x])
     !     n_elements = size(indices)
     !     do i = 1, n_elements
     !        dest(i) = src_flattened(indices(i))
@@ -732,10 +712,10 @@
     !end function prms_get_at_indices_float
     !
     !! Get values of a double variable at the given locations.
-    !function prms_get_at_indices_double(self, var_name, dest, indices) &
+    !function prms_get_at_indices_double(this, name, dest, indices) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(in) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(in) :: this
+    !  character (len=*), intent(in) :: name
     !  double precision, intent(inout) :: dest(:)
     !  integer, intent(in) :: indices(:)
     !  integer :: bmi_status
@@ -743,22 +723,22 @@
     !  double precision, pointer :: src_flattened(:)
     !  integer :: i, n_elements
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_get_at_indices_double
     !
     !! Set new integer values.
-    !function prms_set_int(self, var_name, src) result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_set_int(this, name, src) result (bmi_status)
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(in) :: src(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("model__identification_number")
-    !     self%model%id = src(1)
+    !     this%model%id = src(1)
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     bmi_status = BMI_FAILURE
@@ -766,18 +746,18 @@
     !end function prms_set_int
     !
     !! Set new real values.
-    !function prms_set_float(self, var_name, src) result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_set_float(this, name, src) result (bmi_status)
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  real, intent(in) :: src(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("plate_surface__temperature")
-    !     self%model%temperature = reshape(src, [self%model%n_y, self%model%n_x])
+    !     this%model%temperature = reshape(src, [this%model%n_y, this%model%n_x])
     !     bmi_status = BMI_SUCCESS
     !  case("plate_surface__thermal_diffusivity")
-    !     self%model%alpha = src(1)
+    !     this%model%alpha = src(1)
     !     bmi_status = BMI_SUCCESS
     !  case default
     !     bmi_status = BMI_FAILURE
@@ -785,23 +765,23 @@
     !end function prms_set_float
     !
     !! Set new double values.
-    !function prms_set_double(self, var_name, src) result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !function prms_set_double(this, name, src) result (bmi_status)
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  double precision, intent(in) :: src(:)
     !  integer :: bmi_status
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_set_double
     !
     !! Set integer values at particular locations.
-    !function prms_set_at_indices_int(self, var_name, indices, src) &
+    !function prms_set_at_indices_int(this, name, indices, src) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(in) :: indices(:)
     !  integer, intent(in) :: src(:)
     !  integer :: bmi_status
@@ -809,17 +789,17 @@
     !  integer, pointer :: dest_flattened(:)
     !  integer :: i
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_set_at_indices_int
     !
     !! Set real values at particular locations.
-    !function prms_set_at_indices_float(self, var_name, indices, src) &
+    !function prms_set_at_indices_float(this, name, indices, src) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(in) :: indices(:)
     !  real, intent(in) :: src(:)
     !  integer :: bmi_status
@@ -827,10 +807,10 @@
     !  real, pointer :: dest_flattened(:)
     !  integer :: i
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case("plate_surface__temperature")
-    !     dest = c_loc(self%model%temperature(1,1))
-    !     call c_f_pointer(dest, dest_flattened, [self%model%n_y * self%model%n_x])
+    !     dest = c_loc(this%model%temperature(1,1))
+    !     call c_f_pointer(dest, dest_flattened, [this%model%n_y * this%model%n_x])
     !     do i = 1, size(indices)
     !        dest_flattened(indices(i)) = src(i)
     !     end do
@@ -841,10 +821,10 @@
     !end function prms_set_at_indices_float
     !
     !! Set double values at particular locations.
-    !function prms_set_at_indices_double(self, var_name, indices, src) &
+    !function prms_set_at_indices_double(this, name, indices, src) &
     !     result (bmi_status)
-    !  class (bmi_prms), intent(inout) :: self
-    !  character (len=*), intent(in) :: var_name
+    !  class (bmi_prms), intent(inout) :: this
+    !  character (len=*), intent(in) :: name
     !  integer, intent(in) :: indices(:)
     !  double precision, intent(in) :: src(:)
     !  integer :: bmi_status
@@ -852,17 +832,17 @@
     !  double precision, pointer :: dest_flattened(:)
     !  integer :: i
     !
-    !  select case(var_name)
+    !  select case(name)
     !  case default
     !     bmi_status = BMI_FAILURE
     !  end select
     !end function prms_set_at_indices_double
     !
     !! A non-BMI procedure for model introspection.
-    !subroutine print_model_info(self)
-    !  class (bmi_prms), intent(in) :: self
+    !subroutine print_model_info(this)
+    !  class (bmi_prms), intent(in) :: this
     !
-    !  call print_info(self%model)
+    !  call print_info(this%model)
     !end subroutine print_model_info
 
     end module bmiprms
